@@ -64,7 +64,7 @@ public class Player extends Entity {
         }
         if (keyHandler.moving) {
             spriteCounter++;
-            if (spriteCounter > 12) {
+            if (spriteCounter > 10) {
                 spriteCounter = 0;
                 spriteNum = spriteNum == 1 ? 2 : 1;
             }
