@@ -19,11 +19,16 @@ public class Player extends Entity {
     BufferedImage[] idleLeft;
     BufferedImage[] idleUp;
 
+    BufferedImage[] movingDown;
+    BufferedImage[] movingRight;
+    BufferedImage[] movingLeft;
+    BufferedImage[] movingUp;
+
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
-        screenX = gamePanel.screenWidth / 2 - gamePanel.tileSize / 2;
-        screenY = gamePanel.screenHeight / 2 - gamePanel.tileSize / 2;
+        screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
+        screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
         setDefaultValues();
         getPlayerImage();
     }
@@ -37,15 +42,6 @@ public class Player extends Entity {
 
     public void getPlayerImage() {
         try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
-
             // Load idle images
             idleDown = new BufferedImage[6];
             idleRight = new BufferedImage[6];
@@ -54,13 +50,30 @@ public class Player extends Entity {
 
             for (int i = 0; i < 6; i++) {
                 idleDown[i] = ImageIO
-                        .read(getClass().getResourceAsStream("/player/idle/boy_idle_down_" + (i) + ".png"));
+                        .read(getClass().getResourceAsStream("/player/idle/boy_idle_down_" + i + ".png"));
                 idleRight[i] = ImageIO
-                        .read(getClass().getResourceAsStream("/player/idle_right/boy_idle_right_" + (i) + ".png"));
+                        .read(getClass().getResourceAsStream("/player/idle_right/boy_idle_right_" + i + ".png"));
                 idleLeft[i] = ImageIO
-                        .read(getClass().getResourceAsStream("/player/idle_left/boy_idle_left_" + (i) + ".png"));
+                        .read(getClass().getResourceAsStream("/player/idle_left/boy_idle_left_" + i + ".png"));
                 idleUp[i] = ImageIO
-                        .read(getClass().getResourceAsStream("/player/idle_up/boy_idle_up_" + (i) + ".png"));
+                        .read(getClass().getResourceAsStream("/player/idle_up/boy_idle_up_" + i + ".png"));
+            }
+
+            // Load moving images
+            movingDown = new BufferedImage[6];
+            movingRight = new BufferedImage[6];
+            movingLeft = new BufferedImage[6];
+            movingUp = new BufferedImage[6];
+
+            for (int i = 0; i < 6; i++) {
+                movingDown[i] = ImageIO
+                        .read(getClass().getResourceAsStream("/player/moving_down/boy_moving_down_" + i + ".png"));
+                movingRight[i] = ImageIO
+                        .read(getClass().getResourceAsStream("/player/moving_right/boy_moving_right_" + i + ".png"));
+                movingLeft[i] = ImageIO
+                        .read(getClass().getResourceAsStream("/player/moving_left/boy_moving_left_" + i + ".png"));
+                movingUp[i] = ImageIO
+                        .read(getClass().getResourceAsStream("/player/moving_up/boy_moving_up_" + i + ".png"));
             }
 
         } catch (Exception e) {
@@ -96,7 +109,10 @@ public class Player extends Entity {
             spriteCounter++;
             if (spriteCounter > 10) {
                 spriteCounter = 0;
-                spriteNum = spriteNum == 1 ? 2 : 1;
+                spriteNum++;
+                if (spriteNum >= movingDown.length) {
+                    spriteNum = 0;
+                }
             }
         } else {
             // Handle idle animation
@@ -117,19 +133,19 @@ public class Player extends Entity {
         if (keyHandler.up || keyHandler.down || keyHandler.left || keyHandler.right) {
             switch (direction) {
                 case "up":
-                    img = spriteNum == 1 ? up1 : up2;
+                    img = movingUp[spriteNum];
                     break;
                 case "down":
-                    img = spriteNum == 1 ? down1 : down2;
+                    img = movingDown[spriteNum];
                     break;
                 case "left":
-                    img = spriteNum == 1 ? left1 : left2;
+                    img = movingLeft[spriteNum];
                     break;
                 case "right":
-                    img = spriteNum == 1 ? right1 : right2;
+                    img = movingRight[spriteNum];
                     break;
                 default:
-                    img = down1;
+                    img = movingDown[spriteNum];
                     break;
             }
         } else {
