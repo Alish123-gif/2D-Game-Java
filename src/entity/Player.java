@@ -2,6 +2,8 @@ package entity;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
+
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
@@ -25,10 +27,15 @@ public class Player extends Entity {
     BufferedImage[] movingUp;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
+
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+
         screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
         screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
+
+        solidArea = new Rectangle(8, 16, 28, 28);
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -86,23 +93,45 @@ public class Player extends Entity {
 
         if (keyHandler.up) {
             direction = "up";
-            worldY -= speed;
             moving = true;
         }
         if (keyHandler.down) {
             direction = "down";
-            worldY += speed;
             moving = true;
         }
         if (keyHandler.left) {
             direction = "left";
-            worldX -= speed;
             moving = true;
         }
         if (keyHandler.right) {
             direction = "right";
-            worldX += speed;
             moving = true;
+        }
+
+        // Check collision
+        collisionOn = false;
+        gamePanel.cDetection.checkTile(this);
+
+        if (!collisionOn && moving) {
+            switch (direction) {
+                case "up":
+                    worldY -= speed;
+                    break;
+                case "down":
+                    worldY += speed;
+
+                    break;
+                case "left":
+                    worldX -= speed;
+
+                    break;
+                case "right":
+                    worldX += speed;
+
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (moving) {
