@@ -11,8 +11,8 @@ import main.GamePanel;
 public class TileManager {
 
     GamePanel gamePanel;
-    Tile[] tiles;
-    int mapTileNum[][];
+    public Tile[] tiles;
+    public int mapTileNum[][];
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -21,7 +21,7 @@ public class TileManager {
         mapTileNum = new int[gamePanel.maxWorldColumns][gamePanel.maxWorldRows];
 
         getTileImage();
-        loadMap("/maps/mapEx2.txt");
+        loadMap("/maps/mapEx1.txt");
     }
 
     public void getTileImage() {
@@ -31,18 +31,21 @@ public class TileManager {
 
             tiles[1] = new Tile();
             tiles[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+            tiles[1].collidable = true;
 
             tiles[2] = new Tile();
             tiles[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png"));
 
             tiles[3] = new Tile();
             tiles[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
+            tiles[3].collidable = true;
 
             tiles[4] = new Tile();
             tiles[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png"));
 
             tiles[5] = new Tile();
             tiles[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
+            tiles[5].collidable = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
